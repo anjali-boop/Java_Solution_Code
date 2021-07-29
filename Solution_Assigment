@@ -1,0 +1,173 @@
+public  class Solution  {
+
+    // The value representing a dead cell
+    public static int DEAD   = 0x00;
+
+    // The value representing a live cell
+    public static int LIVE    = 0x01;
+
+    /** 
+     * Start the Solution example
+     * 
+     * @param args  arguments, not used for this example
+     */
+    public  static void main(String[] args) {
+
+        // test the game of life implementation
+        Solution inof = new Solution();
+        inof.test(5);
+    }
+
+
+    /**
+     * Test the Solution implementation, change the array 
+     * values to test each condition in the Solution.
+     *
+     * @param nrIterations      the number of times the board should be played
+     */
+    private void test(int nrIterations) {
+
+        // the starting playing board with life and dead cells
+        int[][] bord =  {{DEAD, LIVE, DEAD, LIVE, DEAD},
+                         {LIVE, DEAD, LIVE, DEAD, LIVE},
+                         {DEAD, LIVE, DEAD, LIVE, DEAD},
+                         {LIVE, DEAD, LIVE, DEAD, LIVE},
+                         {DEAD, LIVE, DEAD, LIVE, DEAD}}; 
+        
+        System.out.println("Conwy's Solution");
+        printBord(bord);
+
+        for (int i = 0 ; i < nrIterations ; i++) {
+            System.out.println();
+            bord = getNextBord(bord);
+            printBord(board);
+        }
+    }
+
+    /** 
+     * Print one bord field to System.out
+     * 
+     * @param bord The bord to be printed to System.out
+     */
+    private void printBord(int[][] bord) {
+
+        for (int i = 0, a = bord.length ; i < a ; i++) {
+
+            for (int j = 0, b = bord[i].length ; j < b ; j++) {
+                System.out.print(Integer.toString(bord[i][j]) + ",");
+            } 
+            System.out.println();
+        }
+    }
+
+    /**
+     * get the next  bord, this will calculate if cells live on or die or new
+     * ones should be created by reproduction.
+     * 
+     * @param b        The current board field
+     * @return A newly created buffer
+     */
+    public int[][] getNextBord(int[][] bord) {
+
+        // The bord does not have any values so return the newly created
+        
+        if (bord.length == 0 || bord[0].length == 0) {
+            throw new IllegalArgumentException("Bord must have a positive amount of rows and/or columns");
+        }
+
+        int nrRows = bord.length;
+        int nrCols = bord[0].length;
+
+        // temporary board to store new values
+        int[][] buf = new int[nrRows][nrCols];
+
+        for (int row = 0 ; row < nrRows ; row++) {
+	
+            for (int col = 0 ; col < nrCols ; col++) {
+                buf[row][col] = getNewCellState(bord[row][col], getLiveNeighbours(row, col, bord));
+            }
+        }   
+        return buf;
+    }
+
+    /**
+     * Get the number of the live neighbours given the cell position
+     * 
+     * @param cellRow       the column position of the cell
+     * @param cellCol       the row position of the cell
+     * @return the number of live neighbours given the position in the array
+     */
+    private int getLiveNeighbours(int cellRow, int cellCol, int[][] bord) {
+
+        int liveNeighbours = 0;
+        int rowEnd = Math.min(board.length , cellRow + 2);
+        int colEnd = Math.min(board[0].length, cellCol + 2);
+
+        for (int row = Math.max(0, cellRow - 1) ; row < rowEnd ; row++) {
+            
+            for (int col = Math.max(0, cellCol - 1) ; col < colEnd ; col++) {
+                
+                // make sure to exclude the cell itself from calculation
+                if ((row != cellRow || col != cellCol) && bord[row][col] == LIVE) {
+                    liveNeighbours++;
+                }
+            }
+        }
+        return liveNeighbours;
+    }
+
+
+    /** 
+     * Get the new state of the cell given the current state and
+     * the number of live neighbours of the cell.
+     * 
+     * @param curState          The current state of the cell, either DEAD or ALIVE
+     * @param liveNeighbours    The number of live neighbours of the given cell.
+     * 
+     * @return The new state of the cell given the number of live neighbours 
+     *         and the current state
+     */
+    private int getNewCellState(int curState, int liveNeighbours) {
+
+        int newState = curState;
+
+        switch (curState) {
+        case LIVE:
+
+            // Any live cell with fewer than two 
+            // live neighbours dies
+            if (liveNeighbours < 2) {
+                newState = DEAD;
+            }
+            // Any live cell with two or three live   
+            // neighbours lives on to the next generation.
+            if (liveNeighbours == 2)
+            {
+                newState = LIVE;
+            }
+           else(liveNeighbours == 3)
+           {
+               newState = DEAD;
+           }
+
+            // Any live cell with more than three live neighbours
+            // dies, as if by overcrowding.
+            if (liveNeighbours > 3) {
+                newState = DEAD;
+            }
+            break;
+
+        case DEAD:
+            // Any dead cell with exactly three live neighbours becomes a 
+            // live cell, as if by reproduction.
+            if (liveNeighbours == 3) {
+                newState = LIVE;
+            }
+            break;
+
+        default:
+            throw new IllegalArgumentException("State of Cell must be either Live or deadd");
+        }			
+        return newState;
+    }
+}
