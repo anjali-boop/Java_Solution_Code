@@ -1,0 +1,23 @@
+<link rel="stylesheet" href="https://css_Solution/.css" integrity="" crossorigin="anonymous">
+    <link rel="stylesheet" href="./css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&display=swap" rel="stylesheet">
+    <title>Solution</title>
+  </head>
+  <body>
+      <div class="container-fluid">
+          <h1>Solution</h1>
+      <div class="container-fluid topic">
+       Solution 
+
+
+      </div>
+      <div class="container-fluid buttons ">
+          <button class="btn btn-primary start" >start</button>
+          <button class="btn btn-primary stop">stop</button>
+          <button class="btn btn-primary randomize">randomize</button>
+
+      </div>
+      <div class="space">
+        <canvas class="life  "></canvas>
+      </div>
+      <canvas></canvas>
